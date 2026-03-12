@@ -1,47 +1,43 @@
-# test_main_page.py
+import pytest
 import sys
 import os
-import pytest
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-if current_dir not in sys.path:
-    sys.path.insert(0, current_dir)
+# Добавляем путь к корневой директории проекта
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from pages.main_page import MainPage
+from pages.basket_page import BasketPage
+from pages.product_page import ProductPage
 
-def test_guest_can_see_login_form_on_main_page(browser):
-    """Тест проверяет наличие формы логина на главной странице"""
-    link = "https://www.saucedemo.com/"
-    page = MainPage(browser, link)
-    page.open()
-    
-    # Проверяем наличие формы логина
-    page.should_be_login_form()
-    
-    print("✅ Форма логина отображается на главной странице")
+import time
 
-def test_guest_can_login_from_main_page(browser):
-    """Тест проверяет возможность авторизации с главной страницы"""
-    link = "https://www.saucedemo.com/"
-    page = MainPage(browser, link)
-    page.open()
+class TestMainPage():
+    def test_guest_can_go_to_login_page(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/"
+        page = MainPage(browser, link)
+        page.open()
+        page.go_to_login_page()
     
-    # Выполняем авторизацию
-    page.login_as_standard_user()
+    def test_guest_should_see_login_link(self, browser):
+        link = "http://selenium1py.pythonanywhere.com/"
+        page = MainPage(browser, link)
+        page.open()
+        page.should_be_login_link()
     
-    # Проверяем, что мы на странице инвентаря
-    WebDriverWait(browser, 5).until(
-        EC.presence_of_element_located((By.CLASS_NAME, "inventory_list"))
-    )
-    
-    # Проверяем URL
-    assert "inventory" in browser.current_url, "Переход на страницу инвентаря не произошел"
-    
-    # Проверяем наличие товаров
-    items = browser.find_elements(By.CLASS_NAME, "inventory_item")
-    assert len(items) > 0, "Товары не отображаются"
-    
-    print("✅ Авторизация выполнена успешно, открыта страница инвентаря")
+    def test_guest_cant_see_product_in_basket_opened_from_main_page(self, browser):
+        # Открываем главную страницу
+        link = "http://selenium1py.pythonanywhere.com/"
+        page = MainPage(browser, link)
+        page.open()
+        
+        # Переходим в корзину по кнопке в шапке сайта
+        page.go_to_basket_page()
+        
+        # Создаем объект страницы корзины
+        basket_page = BasketPage(browser, browser.current_url)
+        
+        # Ожидаем, что в корзине нет товаров
+        basket_page.should_not_be_basket_items()
+        
+        # Ожидаем, что есть текст о том, что корзина пуста
+        basket_page.should_be_basket_empty_message()

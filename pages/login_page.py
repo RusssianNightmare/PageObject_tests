@@ -1,42 +1,35 @@
-# pages/login_page.py
-from selenium.webdriver.common.by import By
 from .base_page import BasePage
 from .locators import LoginPageLocators
+import time
 
 class LoginPage(BasePage):
     def should_be_login_page(self):
-        """Комплексная проверка страницы логина"""
         self.should_be_login_url()
         self.should_be_login_form()
-        self.should_be_error_message_not_present()
-
+        self.should_be_register_form()
+    
     def should_be_login_url(self):
-        """Проверка URL страницы логина"""
-        current_url = self.browser.current_url
-        assert "saucedemo.com" in current_url, f"Страница {current_url} не является страницей saucedemo"
-        assert "inventory" not in current_url, "Мы уже на странице инвентаря, а не на странице логина"
-
+        assert "login" in self.browser.current_url, "This is not a login page"
+    
     def should_be_login_form(self):
-        """Проверка наличия формы логина"""
-        assert self.is_element_present(*LoginPageLocators.LOGIN_FORM), "Форма логина не найдена на странице"
-        assert self.is_element_present(*LoginPageLocators.USERNAME_FIELD), "Поле ввода username не найдено"
-        assert self.is_element_present(*LoginPageLocators.PASSWORD_FIELD), "Поле ввода password не найдено"
-        assert self.is_element_present(*LoginPageLocators.LOGIN_BUTTON), "Кнопка логина не найдена"
-        print("✅ Форма логина присутствует на странице")
-
-    def should_be_error_message_not_present(self):
-        """Проверка отсутствия сообщения об ошибке"""
-        assert not self.is_element_present(*LoginPageLocators.ERROR_MESSAGE), "Присутствует сообщение об ошибке"
-
-    def login_user(self, username, password):
-        """Метод для авторизации пользователя"""
-        self.browser.find_element(*LoginPageLocators.USERNAME_FIELD).send_keys(username)
-        self.browser.find_element(*LoginPageLocators.PASSWORD_FIELD).send_keys(password)
-        self.browser.find_element(*LoginPageLocators.LOGIN_BUTTON).click()
-        print(f"✅ Авторизация выполнена: {username}")
-
-    def should_be_authorized_user(self):
-        """Проверка успешной авторизации"""
-        assert self.is_element_present(By.CLASS_NAME, "inventory_container"), "Страница инвентаря не загрузилась"
-        assert "inventory" in self.browser.current_url, "URL не соответствует странице инвентаря"
-        print("✅ Пользователь успешно авторизован")
+        assert self.is_element_present(*LoginPageLocators.LOGIN_FORM), "Login form is not presented"
+    
+    def should_be_register_form(self):
+        assert self.is_element_present(*LoginPageLocators.REGISTER_FORM), "Register form is not presented"
+    
+    def register_new_user(self, email, password):
+        # Заполняем email
+        email_input = self.browser.find_element(*LoginPageLocators.REGISTER_EMAIL)
+        email_input.send_keys(email)
+        
+        # Заполняем пароль
+        password_input = self.browser.find_element(*LoginPageLocators.REGISTER_PASSWORD)
+        password_input.send_keys(password)
+        
+        # Подтверждаем пароль
+        confirm_password_input = self.browser.find_element(*LoginPageLocators.REGISTER_CONFIRM_PASSWORD)
+        confirm_password_input.send_keys(password)
+        
+        # Нажимаем кнопку регистрации
+        register_button = self.browser.find_element(*LoginPageLocators.REGISTER_BUTTON)
+        register_button.click()

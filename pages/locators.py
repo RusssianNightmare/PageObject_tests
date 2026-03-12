@@ -1,26 +1,27 @@
-# pages/locators.py
 from selenium.webdriver.common.by import By
 
-class MainPageLocators():
-    """Локаторы для главной страницы (страницы логина)"""
-    LOGIN_BUTTON = (By.ID, "login-button")
-    USERNAME_FIELD = (By.ID, "user-name")
-    PASSWORD_FIELD = (By.ID, "password")
-    ERROR_MESSAGE = (By.CSS_SELECTOR, "[data-test='error']")
+class BasePageLocators():
+    LOGIN_LINK = (By.CSS_SELECTOR, "#login_link")
+    LOGIN_LINK_INVALID = (By.CSS_SELECTOR, "#login_link_inc")
+    BASKET_BUTTON = (By.CSS_SELECTOR, ".btn-group a.btn-default")
+    USER_ICON = (By.CSS_SELECTOR, ".icon-user")
 
 class LoginPageLocators():
-    """Локаторы для страницы логина (та же главная страница)"""
-    LOGIN_FORM = (By.CSS_SELECTOR, ".login-box")
-    USERNAME_FIELD = (By.ID, "user-name")
-    PASSWORD_FIELD = (By.ID, "password")
-    LOGIN_BUTTON = (By.ID, "login-button")
-    ERROR_MESSAGE = (By.CSS_SELECTOR, "[data-test='error']")
+    LOGIN_FORM = (By.CSS_SELECTOR, "#login_form")
+    REGISTER_FORM = (By.CSS_SELECTOR, "#register_form")
+    REGISTER_EMAIL = (By.CSS_SELECTOR, "#id_registration-email")
+    REGISTER_PASSWORD = (By.CSS_SELECTOR, "#id_registration-password1")
+    REGISTER_CONFIRM_PASSWORD = (By.CSS_SELECTOR, "#id_registration-password2")
+    REGISTER_BUTTON = (By.CSS_SELECTOR, "[name='registration_submit']")
 
-class InventoryPageLocators():
-    """Локаторы для страницы инвентаря"""
-    INVENTORY_CONTAINER = (By.CLASS_NAME, "inventory_container")
-    INVENTORY_LIST = (By.CLASS_NAME, "inventory_list")
-    INVENTORY_ITEM = (By.CLASS_NAME, "inventory_item")
-    ADD_TO_CART_BUTTON = (By.CSS_SELECTOR, ".btn_inventory")
-    CART_BADGE = (By.CLASS_NAME, "shopping_cart_badge")
-    CART_LINK = (By.CLASS_NAME, "shopping_cart_link")
+class BasketPageLocators():
+    BASKET_ITEMS = (By.CSS_SELECTOR, ".basket-items")
+    BASKET_EMPTY_MESSAGE = (By.CSS_SELECTOR, "#content_inner p")
+
+class ProductPageLocators():
+    PRODUCT_NAME = (By.CSS_SELECTOR, ".product_main h1")
+    PRODUCT_PRICE = (By.CSS_SELECTOR, ".product_main .price_color")
+    ADD_TO_BASKET_BUTTON = (By.CSS_SELECTOR, ".btn-add-to-basket")
+    SUCCESS_MESSAGE = (By.CSS_SELECTOR, ".alert-success .alertinner strong")
+    BASKET_TOTAL_MESSAGE = (By.CSS_SELECTOR, ".alert-info .alertinner strong")
+    SUCCESS_MESSAGE_ABSOLUTE = (By.CSS_SELECTOR, ".alert-success")
