@@ -1,4 +1,3 @@
-# test_inventory_page.py
 import sys
 import os
 import pytest
@@ -6,9 +5,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
-current_dir = os.path.dirname(os.path.abspath(__file__))
-if current_dir not in sys.path:
-    sys.path.insert(0, current_dir)
+# Добавляем путь к корневой директории проекта
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from pages.main_page import MainPage
 from pages.inventory_page import InventoryPage

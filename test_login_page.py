@@ -3,10 +3,8 @@ import os
 import pytest
 from selenium.webdriver.common.by import By
 
-# Добавляем путь к текущей директории в sys.path
-current_dir = os.path.dirname(os.path.abspath(__file__))
-if current_dir not in sys.path:
-    sys.path.insert(0, current_dir)
+# Добавляем путь к корневой директории проекта
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from pages.login_page import LoginPage
 from pages.locators import LoginPageLocators
@@ -51,7 +49,7 @@ class TestLoginPage:
         assert "Epic sadface" in error_text, f"Неожиданный текст ошибки: {error_text}"
         
         # Проверяем, что мы остались на странице логина
-        assert "/inventory" not in browser.current_url, "Произошел переход на страницу инвентаря"
+        assert "inventory" not in browser.current_url, "Произошел переход на страницу инвентаря"
         print("✅ Неверный пароль обработан корректно")
 
     def test_guest_cannot_login_with_invalid_username(self, browser):

@@ -1,35 +1,37 @@
 from .base_page import BasePage
 from .locators import LoginPageLocators
-import time
 
 class LoginPage(BasePage):
     def should_be_login_page(self):
         self.should_be_login_url()
         self.should_be_login_form()
-        self.should_be_register_form()
     
     def should_be_login_url(self):
-        assert "login" in self.browser.current_url, "This is not a login page"
+        # Проверяем, что мы на странице логина SauceDemo
+        assert "saucedemo.com" in self.browser.current_url, "This is not a saucedemo login page"
     
     def should_be_login_form(self):
-        assert self.is_element_present(*LoginPageLocators.LOGIN_FORM), "Login form is not presented"
+        # Проверяем наличие формы логина на SauceDemo
+        assert self.is_element_present(*LoginPageLocators.USERNAME_INPUT), "Username input is not presented"
+        assert self.is_element_present(*LoginPageLocators.PASSWORD_INPUT), "Password input is not presented"
+        assert self.is_element_present(*LoginPageLocators.LOGIN_BUTTON), "Login button is not presented"
     
-    def should_be_register_form(self):
-        assert self.is_element_present(*LoginPageLocators.REGISTER_FORM), "Register form is not presented"
-    
-    def register_new_user(self, email, password):
-        # Заполняем email
-        email_input = self.browser.find_element(*LoginPageLocators.REGISTER_EMAIL)
-        email_input.send_keys(email)
+    def login_user(self, username, password):
+        """Метод для авторизации пользователя на SauceDemo"""
+        # Вводим имя пользователя
+        username_input = self.browser.find_element(*LoginPageLocators.USERNAME_INPUT)
+        username_input.clear()
+        username_input.send_keys(username)
         
-        # Заполняем пароль
-        password_input = self.browser.find_element(*LoginPageLocators.REGISTER_PASSWORD)
+        # Вводим пароль
+        password_input = self.browser.find_element(*LoginPageLocators.PASSWORD_INPUT)
+        password_input.clear()
         password_input.send_keys(password)
         
-        # Подтверждаем пароль
-        confirm_password_input = self.browser.find_element(*LoginPageLocators.REGISTER_CONFIRM_PASSWORD)
-        confirm_password_input.send_keys(password)
-        
-        # Нажимаем кнопку регистрации
-        register_button = self.browser.find_element(*LoginPageLocators.REGISTER_BUTTON)
-        register_button.click()
+        # Нажимаем кнопку логина
+        login_button = self.browser.find_element(*LoginPageLocators.LOGIN_BUTTON)
+        login_button.click()
+    
+    def should_be_authorized_user(self):
+        """Проверяем, что пользователь авторизован (находится на странице инвентаря)"""
+        assert "inventory" in self.browser.current_url, "User is not authorized - not on inventory page"
